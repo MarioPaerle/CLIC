@@ -10,6 +10,8 @@ Built with [Textual](https://textual.textualize.io/) — runs inside your termin
 
 ---
 
+Is super buggy for now so, yk...
+
 ## Features
 
 | Feature | Description |
@@ -44,9 +46,15 @@ CLIC uses [Nerd Font](https://www.nerdfonts.com/) icons. Install one and set it 
 
 ### 3. Run
 
+1) Basic Python running:
 ```bash
 python run.py
 ```
+
+2) Windows Bash
+Simply double click the run.bat 
+
+3) To run the ide externally from other apps you can point them at the run_external.bat
 
 #### CLI options
 
