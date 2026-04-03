@@ -1,0 +1,49 @@
+{
+  "name": "Tokyo Night",
+  "font": {
+    "family": "'JetBrainsMono Nerd Font', 'CaskaydiaCove Nerd Font', 'FiraCode Nerd Font', 'Consolas', monospace",
+    "size": 14,
+    "lineHeight": 1.2
+  },
+  "cursor": {
+    "style": "bar",
+    "blink": true
+  },
+  "colors": {
+    "background": "#000000",
+    "foreground": "#919191",
+    "cursor": "#8ab2c7",
+    "cursorAccent": "#000000",
+    "selection": "#1a1a2e",
+    "selectionText": "#e0e0e0",
+    "black": "#1a1a2e",
+    "red": "#f7768e",
+    "green": "#9ece6a",
+    "yellow": "#e0af68",
+    "blue": "#7aa2f7",
+    "magenta": "#bb9af7",
+    "cyan": "#7dcfff",
+    "white": "#c0caf5",
+    "brightBlack": "#565f89",
+    "brightRed": "#f7768e",
+    "brightGreen": "#9ece6a",
+    "brightYellow": "#e0af68",
+    "brightBlue": "#7aa2f7",
+    "brightMagenta": "#bb9af7",
+    "brightCyan": "#7dcfff",
+    "brightWhite": "#ffffff"
+  },
+  "ui": {
+    "sidebar_bg": "#000000",
+    "sidebar_border": "#111111",
+    "sidebar_text": "#3a3a3a",
+    "sidebar_dir": "#5a6a90",
+    "sidebar_dir_hover": "#7aa2f7",
+    "sidebar_hover_bg": "#060606",
+    "tab_bg": "#000000",
+    "tab_border": "#111111",
+    "tab_text": "#333333",
+    "tab_active_text": "#7aa2f7",
+    "tab_hover_text": "#888888"
+  }
+}

@@ -1,0 +1,85 @@
+# CLIC — Configuration
+
+# Shell to spawn in the terminal
+shell: "cmd"
+
+shell_options:
+  powershell:
+    executable: "powershell.exe"
+    args: ["-NoLogo", "-NoProfile"]
+  cmd:
+    executable: "cmd.exe"
+    args: []
+
+# Font (must be a monospace Nerd Font for icons to work)
+# Install one from https://www.nerdfonts.com/
+font:
+  family: "JetBrainsMono Nerd Font"
+  size: 14
+  line_height: 1.2
+
+# Background image (optional, leave empty for solid color)
+# Supports: absolute path or relative to CLIC directory
+# background_image: "assets/bg.png"
+# background_opacity: 0.05
+background_image: ""
+background_opacity: 0.05
+
+# Sounds
+sounds:
+  enabled: true
+  master_volume: 0.7
+  typing:
+    enabled: true
+    volume: 0.8
+    directory: "sounds/typing"
+  ambient:
+    enabled: false
+    volume: 0.15
+    file: "sounds/ambient/ambient.wav"
+  effects:
+    enabled: true
+    volume: 0.3
+    mapping:
+      command_run: "sounds/effects/run.wav"
+      command_success: "sounds/effects/success.wav"
+      command_error: "sounds/effects/error.wav"
+      cd: "sounds/effects/cd.wav"
+      startup: "sounds/effects/startup.wav"
+      file_open: "sounds/effects/open.wav"
+
+# File browser sidebar
+file_browser:
+  show_hidden: false
+  exclude:
+    - "__pycache__"
+    - "node_modules"
+    - ".git"
+    - "*.pyc"
+    - ".DS_Store"
+    - "Thumbs.db"
+
+# Command history
+history:
+  max_entries: 1000
+  persistent: true
+  file: ".clic_history"
+
+# Custom shortcuts (shown in sidebar, triggered with key combos)
+# Format: label: { command: "...", key: "ctrl+shift+..." }
+shortcuts:
+  - label: " Git Status"
+    command: "git status"
+    key: "ctrl+shift+g"
+  - label: " Git Log"
+    command: "git log --oneline -15"
+    key: "ctrl+shift+l"
+  - label: " Git Diff"
+    command: "git diff"
+    key: ""
+  - label: " List Files"
+    command: "dir"
+    key: ""
+  - label: "󰌠 Python"
+    command: "python"
+    key: "ctrl+shift+p"
