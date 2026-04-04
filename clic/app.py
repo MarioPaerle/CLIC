@@ -186,6 +186,13 @@ class TerminalServer:
                     if folder:
                         self.current_dir = folder
                         await self._send_files(websocket)
+                        session = msg.get("session")
+                        if session:
+                            pty = self.sessions.get(session)
+                            if pty:
+                                escaped = folder.replace('"', '""')
+                                pty.write(f'cd /d "{escaped}"\r')
+                            self.sound.play_effect("cd")
 
                 elif t == "open_settings":
                     theme_path = str(Path(__file__).parent / "web" / "theme.json")
@@ -195,6 +202,33 @@ class TerminalServer:
                         os.startfile(config_path)
                     except Exception:
                         pass
+
+                elif t == "set_volume":
+                    self.sound.set_volumes(
+                        master=msg.get("master"),
+                        typing=msg.get("typing"),
+                        effects=msg.get("effects"),
+                    )
+
+                elif t == "toggle_ambient":
+                    self.sound.toggle_ambient()
+
+                elif t == "open_url":
+                    url = msg.get("url", "")
+                    if url.startswith(("http://", "https://")):
+                        try:
+                            os.startfile(url)
+                        except Exception:
+                            pass
+
+                elif t == "save_md":
+                    md_path = msg.get("path", "")
+                    md_content = msg.get("content", "")
+                    if md_path:
+                        try:
+                            Path(md_path).write_text(md_content, encoding="utf-8")
+                        except Exception:
+                            pass
 
                 elif t == "save_colors":
                     theme_path = Path(__file__).parent / "web" / "theme.json"
@@ -263,7 +297,7 @@ class TerminalServer:
                 try:
                     content = Path(path).read_text(encoding="utf-8", errors="replace")
                     await websocket.send(json.dumps({
-                        "type": "md_content", "filename": name, "content": content,
+                        "type": "md_content", "filename": name, "content": content, "path": path,
                     }))
                 except Exception:
                     pass
@@ -313,6 +347,12 @@ class CLICHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         self._web_dir = str(Path(__file__).parent / "web")
         super().__init__(*args, directory=self._web_dir, **kwargs)
+
+    def end_headers(self):
+        self.send_header("Cache-Control", "no-store, no-cache, must-revalidate")
+        self.send_header("Pragma", "no-cache")
+        self.send_header("Expires", "0")
+        super().end_headers()
 
     def do_GET(self):
         # Serve background image from config path
@@ -372,7 +412,7 @@ def run():
             time.sleep(0.1)
 
     browser = _find_edge() or _find_chrome()
-    url = f"http://127.0.0.1:{http_port}/index.html"
+    url = f"http://127.0.0.1:{http_port}/index.html?v={int(time.time())}"
 
     if not browser:
         print(f"Open {url} in your browser")
@@ -383,6 +423,10 @@ def run():
             pass
     else:
         user_data = os.path.join(tempfile.gettempdir(), "clic-browser")
+        # Clear cached pages so the browser always loads fresh content
+        cache_dir = os.path.join(user_data, "Default", "Cache")
+        if os.path.isdir(cache_dir):
+            shutil.rmtree(cache_dir, ignore_errors=True)
         proc = subprocess.Popen([
             browser,
             f"--app={url}",

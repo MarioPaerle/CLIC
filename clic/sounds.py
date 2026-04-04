@@ -23,6 +23,16 @@ class SoundManager:
         self._effects: dict[str, object] = {}
         self._ambient = None
         self._ambient_on = False
+        self._master_vol = 0.4
+        self._typing_vol = 0.2
+        self._effects_vol = 0.3
+        self._ambient_vol = 0.15
+
+    def set_volumes(self, master=None, typing=None, effects=None, ambient=None):
+        if master is not None: self._master_vol = max(0.0, min(1.0, float(master)))
+        if typing is not None: self._typing_vol = max(0.0, min(1.0, float(typing)))
+        if effects is not None: self._effects_vol = max(0.0, min(1.0, float(effects)))
+        if ambient is not None: self._ambient_vol = max(0.0, min(1.0, float(ambient)))
 
     def init(self):
         if not _PYGAME or not Config.get("sounds", "enabled", default=True):
@@ -74,8 +84,7 @@ class SoundManager:
         if not self._ok or not self._typing:
             return
         s = random.choice(self._typing)
-        vol = Config.get("sounds", "master_volume", default=0.4) * Config.get("sounds", "typing", "volume", default=0.2)
-        s.set_volume(vol)
+        s.set_volume(self._master_vol * self._typing_vol)
         s.play()
 
     def play_effect(self, action: str):
@@ -84,19 +93,17 @@ class SoundManager:
         s = self._effects.get(action)
         if not s:
             return
-        vol = Config.get("sounds", "master_volume", default=0.4) * Config.get("sounds", "effects", "volume", default=0.3)
-        s.set_volume(vol)
+        s.set_volume(self._master_vol * self._effects_vol)
         s.play()
 
     def toggle_ambient(self):
         if not self._ok or not self._ambient:
             return
-        vol = Config.get("sounds", "master_volume", default=0.4) * Config.get("sounds", "ambient", "volume", default=0.15)
         if self._ambient_on:
             self._ambient.stop()
             self._ambient_on = False
         else:
-            self._ambient.set_volume(vol)
+            self._ambient.set_volume(self._master_vol * self._ambient_vol)
             self._ambient.play(loops=-1)
             self._ambient_on = True
 
